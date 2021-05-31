@@ -4,13 +4,6 @@ services:
     image: "ubuntu:bionic"
     restart: on-failure
 
-    environment:
-      - MYSQL_DATABASE=mydb
-      - MYSQL_ROOT_PASSWORD=12345678
-      - DATABASE_USER=root
-      - DATABASE_PASSWORD=12345678
-      - DATABASE_NAME=mydb
-      - DATABASE_PORT=3307
     build:
       context: .
       dockerfile: "Dockerfile"
@@ -22,4 +15,3 @@ services:
       start_period: 60s
     ports:
       - 9090:9090
-      - 3307:3307
