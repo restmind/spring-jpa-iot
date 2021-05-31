@@ -1,28 +1,25 @@
 version: '3'
 services:
-  mysql-database:
-    image: "mysql:latest"
-    volumes:
-      - /var/lib/docker/volumes/mysql-db:/var/lib/mysql-db
-    environment:
-      - MYSQL_DATABASE=pazyniuk_jpa
-      - MYSQL_ROOT_PASSWORD=123456
-      - MYSQL_HOST=mysql-database
-  java-web:
+  main-container:
     image: "ubuntu:bionic"
     restart: on-failure
-    depends_on:
-      - mysql-database
+
     environment:
-      - DATABASE_HOST=mysql-database
+      - MYSQL_DATABASE=mydb
+      - MYSQL_ROOT_PASSWORD=12345678
       - DATABASE_USER=root
-      - DATABASE_PASSWORD=123456
-      - DATABASE_NAME=pazyniuk_jpa
-      - DATABASE_PORT=3306
+      - DATABASE_PASSWORD=12345678
+      - DATABASE_NAME=mydb
+      - DATABASE_PORT=3307
     build:
       context: .
       dockerfile: "Dockerfile"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/healthcheck"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
     ports:
-      - 8080:8080
       - 9090:9090
-      - 9100:9100
+      - 3307:3307

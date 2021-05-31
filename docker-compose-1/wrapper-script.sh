@@ -1,20 +1,13 @@
-cd
-wget https://github.com/prometheus/prometheus/releases/download/v2.26.0/prometheus-2.26.0.linux-amd64.tar.gz
-tar -xzf prometheus-2.26.0.linux-amd64.tar.gz
-cd prometheus-2.26.0.linux-amd64/
-rm -f prometheus.yml
-wget https://raw.githubusercontent.com/damoklov/operation-systems/master/prometheus.yml
-./prometheus &
+/etc/init.d/mysql start
 
 cd
-wget https://github.com/prometheus/node_exporter/releases/download/v1.1.2/node_exporter-1.1.2.linux-amd64.tar.gz
-tar -xzf node_exporter-1.1.2.linux-amd64.tar.gz
-cd node_exporter-1.1.2.linux-amd64/
-./node_exporter &
-
-cd
-git clone -b docker https://github.com/damoklov/spring-jpa-iot.git
+git clone https://github.com/restmind/spring-jpa-iot.git
 cd spring-jpa-iot/
 mvn install
 mvn clean package
+timeout 30s mvn spring-boot:run
+
+export MYSQL_PWD=12345678
+/usr/bin/mysql -u root -e "CREATE DATABASE IF NOT EXISTS mydb;"
+/usr/bin/mysql -u root -e "FLUSH PRIVILEGES;"
 mvn spring-boot:run
